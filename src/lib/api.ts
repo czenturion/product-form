@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://app.tablecrm.com/api/v1';
-const TOKEN = 'af1874616430e04cfd4bce30035789907e899fc7c3a1a4bb27254828ff304a77';
+const TOKEN = process.env.NEXT_PUBLIC_API_TOKEN;
 
 export interface ProductPayload {
     name: string;
