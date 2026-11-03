@@ -43,17 +43,11 @@ const formSchema = z.object({
     seo_keywords: z.string().optional(),
 
     address: z.string().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
+    latitude: z.coerce.number().optional(),
+    longitude: z.coerce.number().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
-
-const categories = [
-    { id: 2477, name: 'Электроника' },
-    { id: 2478, name: 'Одежда' },
-    { id: 2479, name: 'Дом и сад' },
-];
 
 const units = [
     { id: 116, name: 'шт' },
@@ -136,7 +130,7 @@ export function ProductForm() {
                 longitude: data.longitude || 0,
             };
 
-            const result = await createProduct(payload);
+            await createProduct(payload);
             toast.success('Товар успешно создан!')
             form.reset();
         } catch (err) {
@@ -193,10 +187,16 @@ export function ProductForm() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Категория *</FormLabel>
-                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <Select
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                disabled={loadingCategories}
+                                            >
                                                 <FormControl>
                                                     <SelectTrigger>
-                                                        <SelectValue placeholder="Выберите категорию" />
+                                                        <SelectValue
+                                                            placeholder={loadingCategories ? 'Загрузка…' : 'Выберите категорию'}
+                                                        />
                                                     </SelectTrigger>
                                                 </FormControl>
                                                 <SelectContent
